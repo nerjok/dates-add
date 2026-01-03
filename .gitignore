@@ -1,0 +1,9 @@
+speed-dates/bin/Debug/*
+speed-dates/bin/Release/*
+speed-dates/obj/*
+speed-dates/wwwroot/*
+client/node_modules/*
+client/.next/*
+client/out/*
+client/dist/*
+client/.env
