@@ -19,8 +19,21 @@ RUN dotnet publish -c Release -o out
 
 # # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
+
 WORKDIR /app
-COPY ./oci-postgress-ca.pem ./
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+# COPY ./oci-postgres-ca.pem ./
+# COPY ./oci-postgres-ca.crt ./
+COPY ssl/. /https/
+COPY ssl/mycert.crt /usr/local/share/ca-certificates/certificate.crt
+
+RUN update-ca-certificates
+
 COPY --from=build-env ./app/out .
 COPY --from=front-build ./app/out ./wwwroot
+
+EXPOSE 80
+EXPOSE 443
+
 ENTRYPOINT ["dotnet", "speed-dates.dll"]

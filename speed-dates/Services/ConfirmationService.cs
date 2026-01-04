@@ -74,7 +74,7 @@ public class ConfirmationService : IConfirmationService
     {
         var result = await _messageRepository.ConfirmMessageAsync(confirmationCode);
 
-        if(result == null || result.Confirmed == true)
+        if(result == null || result.Confirmed != true)
         {
             return false;
         }

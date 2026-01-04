@@ -79,5 +79,19 @@ app.Use(async (context, next) =>
 app.UseStaticFiles();
 app.UseDefaultFiles();
 
+// Run migrations Before starting the app
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+try
+{
+  var context = services.GetRequiredService<ApiDbContext>();
+  await context.Database.MigrateAsync();
+}
+catch (Exception ex)
+{
+  var logger = services.GetRequiredService<ILogger<Program>>();
+  logger.LogError(ex, "An error occurred during migration");
+}
+
 app.Run();
 
