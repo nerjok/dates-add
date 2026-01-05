@@ -17,6 +17,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Restore .pfx certificate
+        run: |
+          echo "${{ secrets.ASPNET_PFX_BASE64 }}" | base64 -d > ./ssl/aspnet.pfx
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -45,4 +49,4 @@ jobs:
             sudo docker pull ghcr.io/nerjok/dates-add:latest
             sudo docker stop phub || true
             sudo docker rm phub || true
-            sudo docker run -d --name phub -p 80:8080 -p 443:8080 ghcr.io/nerjok/dates-add:latest
+            sudo docker run -d --name phub -p 80:8080 -p 443:443 ghcr.io/nerjok/dates-add:latest
